@@ -1,4 +1,5 @@
-export default interface BoardItem {
-  style: any;
+export default interface BoardItemProps {
+  size: string;
+  boardColor: string;
   onClick: () => void;
 }

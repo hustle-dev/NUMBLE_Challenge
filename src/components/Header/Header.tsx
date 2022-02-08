@@ -1,6 +1,6 @@
-import React, { ReactNode } from 'react';
+import React, { memo } from 'react';
 import HeaderProps from './Header.types';
 
-export default function Header({ children }: HeaderProps): JSX.Element {
+export default memo(function Header({ children }: HeaderProps): JSX.Element {
   return <header className="header">{children}</header>;
-}
+});
