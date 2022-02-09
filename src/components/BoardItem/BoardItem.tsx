@@ -2,10 +2,11 @@ import React, { memo } from 'react';
 import './BoardItem.css';
 import BoardItemProps from './BoardItem.types';
 
-export default memo(function BoardItem({ size, boardColor, onClick }: BoardItemProps) {
+export default memo(function BoardItem({ size, boardColor, onClick }: BoardItemProps): JSX.Element {
   return (
     <div
       role="button"
+      className="board-item"
       tabIndex={0}
       aria-label="보드 아이템"
       onKeyPress={onClick}
@@ -14,7 +15,6 @@ export default memo(function BoardItem({ size, boardColor, onClick }: BoardItemP
         height: size,
         backgroundColor: boardColor,
       }}
-      className="board-item"
       onClick={onClick}
     />
   );

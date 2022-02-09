@@ -1,11 +1,10 @@
-import React, { useEffect, useMemo, useReducer } from 'react';
+import React, { useCallback, useEffect, useMemo, useReducer } from 'react';
 import { Header, A11yHidden, GameInfo, Board } from 'components';
 import { initialState, reducer } from 'reducer';
 import {
   getAnswerBoardColor,
   getAnswerIndex,
   getBoardColor,
-  getBoardItems,
   getBoardItemSize,
   getColorDiff,
   getLengthOfBoardRow,
@@ -36,28 +35,34 @@ export default function App(): JSX.Element {
     window.alert(`GAME OVER!\n스테이지: ${stage}, 점수: ${score}`);
 
     dispatch({ type: 'GAME_RESET' });
-  }, [isPlaying, dispatch]);
+  }, [isPlaying, dispatch, stage, score]);
 
   const boardData = useMemo(() => {
     const lengthOfBoardRow = getLengthOfBoardRow(stage);
     const numOfBoardItems = getNumOfBoardItems(lengthOfBoardRow);
     const size = getBoardItemSize(lengthOfBoardRow);
-    const boardItems = getBoardItems(numOfBoardItems, getAnswerIndex(0, numOfBoardItems));
+    const answerIndex = getAnswerIndex(0, numOfBoardItems);
 
     const rgbArray = getRGBColorArray();
     const boardColor = getBoardColor(rgbArray);
     const answerBoardColor = getAnswerBoardColor(rgbArray, getColorDiff(stage));
 
-    const onClick = (isAnswer: boolean) => {
-      if (isAnswer) {
-        dispatch({ type: 'CHOOSE_ANSWER' });
-      } else {
-        dispatch({ type: 'CHOOSE_WRONG_ANSWER' });
-      }
+    return {
+      size,
+      numOfBoardItems,
+      answerIndex,
+      boardColor,
+      answerBoardColor,
     };
+  }, [stage]);
 
-    return { size, boardItems, boardColor, answerBoardColor, onClick };
-  }, [stage, dispatch]);
+  const onClick = useCallback((isAnswer: boolean) => {
+    if (isAnswer) {
+      dispatch({ type: 'CHOOSE_ANSWER' });
+    } else {
+      dispatch({ type: 'CHOOSE_WRONG_ANSWER' });
+    }
+  }, []);
 
   return (
     <>
@@ -65,7 +70,7 @@ export default function App(): JSX.Element {
         <A11yHidden as="h1">다른 색깔 찾기 게임</A11yHidden>
         <GameInfo stage={stage} time={time} score={score} />
       </Header>
-      <Board boardData={boardData} />
+      <Board boardData={boardData} onClick={onClick} />
     </>
   );
 }

@@ -1,16 +1,12 @@
-interface boardItemsIDArray {
-  id: number;
-  isAnswer: boolean;
-}
-
 interface BoardData {
   size: string;
-  boardItems: boardItemsIDArray[];
+  numOfBoardItems: number;
+  answerIndex: number;
   boardColor: string;
   answerBoardColor: string;
-  onClick: (isAnswer: boolean) => void;
 }
 
 export default interface BoardProps {
   boardData: BoardData;
+  onClick: (isAnswer: boolean) => void;
 }

@@ -1,5 +1,5 @@
 import React, { memo } from 'react';
-import { GameInfoProps } from './GameInfo.types';
+import GameInfoProps from './GameInfo.types';
 
 export default memo(function GameInfo({ stage, time, score }: GameInfoProps): JSX.Element {
   return (
