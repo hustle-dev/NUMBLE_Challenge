@@ -1,9 +1,13 @@
+interface boardItemsIDArray {
+  id: number;
+  isAnswer: boolean;
+}
+
 interface BoardData {
   size: string;
+  boardItems: boardItemsIDArray[];
   boardColor: string;
   answerBoardColor: string;
-  numOfBoardItems: number;
-  answerIndex: number;
   onClick: (isAnswer: boolean) => void;
 }
 

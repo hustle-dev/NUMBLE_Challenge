@@ -1,10 +1,21 @@
 import React, { useEffect, useMemo, useReducer } from 'react';
 import { Header, A11yHidden, GameInfo, Board } from 'components';
 import { initialState, reducer } from 'reducer';
-import { getRowBoardItems } from 'utils';
+import {
+  getAnswerBoardColor,
+  getAnswerIndex,
+  getBoardColor,
+  getBoardItems,
+  getBoardItemSize,
+  getColorDiff,
+  getLengthOfBoardRow,
+  getNumOfBoardItems,
+  getRGBColorArray,
+} from 'utils';
 
 export default function App(): JSX.Element {
   const [state, dispatch] = useReducer(reducer, initialState);
+
   const { isPlaying, stage, time, score } = state;
 
   useEffect(() => {
@@ -17,7 +28,7 @@ export default function App(): JSX.Element {
     return () => {
       clearInterval(intervalID);
     };
-  }, [time]);
+  }, [time, dispatch]);
 
   useEffect(() => {
     if (isPlaying) return;
@@ -25,32 +36,17 @@ export default function App(): JSX.Element {
     window.alert(`GAME OVER!\n스테이지: ${stage}, 점수: ${score}`);
 
     dispatch({ type: 'GAME_RESET' });
-  }, [isPlaying]);
+  }, [isPlaying, dispatch]);
 
   const boardData = useMemo(() => {
-    const numOfBoardItemsInRow = getRowBoardItems(stage);
-    const size = `${(360 - numOfBoardItemsInRow * 2 * 2) / numOfBoardItemsInRow}px`;
+    const lengthOfBoardRow = getLengthOfBoardRow(stage);
+    const numOfBoardItems = getNumOfBoardItems(lengthOfBoardRow);
+    const size = getBoardItemSize(lengthOfBoardRow);
+    const boardItems = getBoardItems(numOfBoardItems, getAnswerIndex(0, numOfBoardItems));
 
-    const diff = Math.max(25 - Math.floor((stage + 1) / 3), 1);
-    const getRandomRGB = () => Math.floor(Math.random() * 256);
-
-    const getRGBColorArray = () => Array.from({ length: 3 }, () => getRandomRGB());
-    const getBoardColor = ([red, green, blue]: number[]) => `rgb(${red}, ${green}, ${blue})`;
     const rgbArray = getRGBColorArray();
     const boardColor = getBoardColor(rgbArray);
-
-    const getAnswerBoardColor = ([red, green, blue]: number[]) => `rgb(${red + diff > 255 ? red - diff : red + diff}, 
-      ${green + diff > 255 ? green - diff : green + diff}
-      ${blue + diff > 255 ? blue - diff : blue + diff})`;
-
-    const answerBoardColor = getAnswerBoardColor(rgbArray);
-
-    const getRandomIndex = (min: number, max: number) => {
-      return Math.floor(Math.random() * (max - min)) + min;
-    };
-
-    const numOfBoardItems = numOfBoardItemsInRow ** 2;
-    const answerIndex = getRandomIndex(0, numOfBoardItems);
+    const answerBoardColor = getAnswerBoardColor(rgbArray, getColorDiff(stage));
 
     const onClick = (isAnswer: boolean) => {
       if (isAnswer) {
@@ -60,8 +56,8 @@ export default function App(): JSX.Element {
       }
     };
 
-    return { size, boardColor, answerBoardColor, numOfBoardItems, answerIndex, onClick };
-  }, [stage]);
+    return { size, boardItems, boardColor, answerBoardColor, onClick };
+  }, [stage, dispatch]);
 
   return (
     <>

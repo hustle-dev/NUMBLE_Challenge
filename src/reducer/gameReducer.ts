@@ -1,4 +1,4 @@
-import { INITIAL_REMAINING_TIME } from './gameConstants';
+import { INITIAL_REMAINING_TIME, PENALTY_TIME } from './gameConstants';
 import { actionType, stateProps } from './gameReducer.types';
 
 export const initialState = Object.freeze({
@@ -21,7 +21,7 @@ export function reducer(state: stateProps, action: actionType) {
     case 'CHOOSE_WRONG_ANSWER':
       return {
         ...state,
-        time: state.time - 3 < 0 ? 0 : state.time - 3,
+        time: state.time - PENALTY_TIME < 0 ? 0 : state.time - PENALTY_TIME,
       };
 
     case 'TICK_TOCK':

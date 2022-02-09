@@ -4,20 +4,17 @@ import { BoardItem } from 'components';
 import BoardProps from './Board.types';
 
 export default memo(function Board({ boardData }: BoardProps): JSX.Element {
-  const { size, boardColor, answerBoardColor, numOfBoardItems, answerIndex, onClick } = boardData;
+  const { size, boardColor, answerBoardColor, onClick, boardItems } = boardData;
 
-  // boardItem을 위한 키를 만들어야 할듯...
   return (
     <div className="wrapper">
-      {Array.from({ length: numOfBoardItems }, (_, i) => (
-        // eslint-disable-next-line react/no-array-index-key
+      {boardItems.map(({ id, isAnswer }) => (
         <BoardItem
-          // eslint-disable-next-line react/no-array-index-key
-          key={i}
+          key={id}
           size={size}
-          boardColor={i === answerIndex ? answerBoardColor : boardColor}
+          boardColor={isAnswer ? answerBoardColor : boardColor}
           onClick={() => {
-            onClick(i === answerIndex);
+            onClick(isAnswer);
           }}
         />
       ))}
