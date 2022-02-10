@@ -1,23 +1,36 @@
-import React, { memo } from 'react';
+import React from 'react';
 import './Board.css';
-import { BoardItem } from 'components';
-import BoardProps from './Board.types';
+import { BoardProps, BoardListProps } from './Board.types';
 
-export default memo(function Board({ boardData, boardColor, answerBoardColor, onClick }: BoardProps): JSX.Element {
-  const { size, numOfBoardItems, answerIndex } = boardData;
+export default function Board({ children }: BoardProps): JSX.Element {
+  return <div className="wrapper">{children}</div>;
+}
+
+Board.List = function BoardList({ boardData, onClick }: BoardListProps) {
+  const { size, numOfBoardItems, answerIndex, boardColor, answerBoardColor } = boardData;
 
   return (
-    <div className="wrapper">
+    <>
       {Array.from({ length: numOfBoardItems }, (_, i) => (
-        <BoardItem
+        <div
           key={i}
-          size={size}
-          boardColor={i === answerIndex ? answerBoardColor : boardColor}
+          role="button"
+          className="board-item"
+          tabIndex={0}
+          aria-label="보드 아이템"
+          onKeyPress={() => {
+            onClick(i === answerIndex);
+          }}
+          style={{
+            width: size,
+            height: size,
+            backgroundColor: i === answerIndex ? answerBoardColor : boardColor,
+          }}
           onClick={() => {
             onClick(i === answerIndex);
           }}
         />
       ))}
-    </div>
+    </>
   );
-});
+};

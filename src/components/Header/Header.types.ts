@@ -1,5 +1,15 @@
 import { ReactNode } from 'react';
 
-export default interface HeaderProps {
+export interface HeaderProps {
   children: ReactNode;
+}
+
+interface GameInfo {
+  stage: number;
+  time: number;
+  score: number;
+}
+
+export interface GameInfoProps {
+  gameInfo: GameInfo;
 }
