@@ -17,7 +17,7 @@ export default function App(): JSX.Element {
 
   const { isPlaying, stage, time, score } = state;
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     const intervalID = setInterval(() => {
       dispatch({ type: 'TICK_TOCK' });
     }, 1000);
@@ -32,9 +32,11 @@ export default function App(): JSX.Element {
   useEffect(() => {
     if (isPlaying) return;
 
-    window.alert(`GAME OVER!\n스테이지: ${stage}, 점수: ${score}`);
+    setTimeout(() => {
+      window.alert(`GAME OVER!\n스테이지: ${stage}, 점수: ${score}`);
 
-    dispatch({ type: 'GAME_RESET' });
+      dispatch({ type: 'GAME_RESET' });
+    }, 100);
   }, [isPlaying, dispatch, stage, score]);
 
   const boardData = useMemo(() => {
