@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo, useReducer } from 'react';
+import React, { useCallback, useEffect, useLayoutEffect, useMemo, useReducer, useRef } from 'react';
 import { Header, A11yHidden, GameInfo, Board } from 'components';
 import { initialState, reducer } from 'reducer';
 import {
@@ -17,7 +17,7 @@ export default function App(): JSX.Element {
 
   const { isPlaying, stage, time, score } = state;
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     const intervalID = setInterval(() => {
       dispatch({ type: 'TICK_TOCK' });
     }, 1000);

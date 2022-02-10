@@ -1,8 +1,8 @@
-import React, { memo } from 'react';
+import React from 'react';
 import './BoardItem.css';
 import BoardItemProps from './BoardItem.types';
 
-export default memo(function BoardItem({ size, boardColor, onClick }: BoardItemProps): JSX.Element {
+export default function BoardItem({ size, boardColor, onClick }: BoardItemProps): JSX.Element {
   return (
     <div
       role="button"
@@ -18,4 +18,4 @@ export default memo(function BoardItem({ size, boardColor, onClick }: BoardItemP
       onClick={onClick}
     />
   );
-});
+}
