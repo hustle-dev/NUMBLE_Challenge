@@ -1,11 +1,13 @@
-import { INITIAL_REMAINING_TIME, PENALTY_TIME } from './gameConstants';
+import { getColor, getScore } from 'utils';
+import { INITIAL_REMAINING_TIME, INITIAL_STAGE, ONE_SECOND, PENALTY_TIME } from './gameConstants';
 import { actionType, stateProps } from './gameReducer.types';
 
 export const initialState = Object.freeze({
   isPlaying: true,
   time: INITIAL_REMAINING_TIME,
-  stage: 1,
+  stage: INITIAL_STAGE,
   score: 0,
+  ...getColor(INITIAL_STAGE),
 });
 
 export function reducer(state: stateProps, action: actionType) {
@@ -15,7 +17,8 @@ export function reducer(state: stateProps, action: actionType) {
         ...state,
         stage: state.stage + 1,
         time: INITIAL_REMAINING_TIME,
-        score: state.score + state.stage ** 3 * state.time,
+        score: state.score + getScore(state.stage, state.time),
+        ...getColor(state.stage + 1),
       };
 
     case 'CHOOSE_WRONG_ANSWER':
@@ -27,7 +30,7 @@ export function reducer(state: stateProps, action: actionType) {
     case 'TICK_TOCK':
       return {
         ...state,
-        time: state.time - 1 < 0 ? 0 : state.time - 1,
+        time: state.time - ONE_SECOND < 0 ? 0 : state.time - ONE_SECOND,
       };
 
     case 'GAME_OVER':
@@ -37,7 +40,10 @@ export function reducer(state: stateProps, action: actionType) {
       };
 
     case 'GAME_RESET':
-      return initialState;
+      return {
+        ...initialState,
+        ...getColor(INITIAL_STAGE),
+      };
 
     default:
       throw new Error('잘못된 동작입니다.');

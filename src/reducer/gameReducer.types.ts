@@ -3,6 +3,8 @@ export interface stateProps {
   stage: number;
   time: number;
   score: number;
+  boardColor: string;
+  answerBoardColor: string;
 }
 
 export type actionType =

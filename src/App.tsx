@@ -1,21 +1,12 @@
-import React, { useCallback, useEffect, useLayoutEffect, useMemo, useReducer, useRef } from 'react';
+import React, { useCallback, useEffect, useMemo, useReducer, useRef } from 'react';
 import { Header, A11yHidden, GameInfo, Board } from 'components';
 import { initialState, reducer } from 'reducer';
-import {
-  getAnswerBoardColor,
-  getAnswerIndex,
-  getBoardColor,
-  getBoardItemSize,
-  getColorDiff,
-  getLengthOfBoardRow,
-  getNumOfBoardItems,
-  getRGBColorArray,
-} from 'utils';
+import { getAnswerIndex, getBoardItemSize, getLengthOfBoardRow, getNumOfBoardItems } from 'utils';
 
 export default function App(): JSX.Element {
   const [state, dispatch] = useReducer(reducer, initialState);
 
-  const { isPlaying, stage, time, score } = state;
+  const { isPlaying, stage, time, score, boardColor, answerBoardColor } = state;
 
   useEffect(() => {
     const intervalID = setInterval(() => {
@@ -45,16 +36,10 @@ export default function App(): JSX.Element {
     const size = getBoardItemSize(lengthOfBoardRow);
     const answerIndex = getAnswerIndex(0, numOfBoardItems);
 
-    const rgbArray = getRGBColorArray();
-    const boardColor = getBoardColor(rgbArray);
-    const answerBoardColor = getAnswerBoardColor(rgbArray, getColorDiff(stage));
-
     return {
       size,
       numOfBoardItems,
       answerIndex,
-      boardColor,
-      answerBoardColor,
     };
   }, [stage]);
 
@@ -72,7 +57,7 @@ export default function App(): JSX.Element {
         <A11yHidden as="h1">다른 색깔 찾기 게임</A11yHidden>
         <GameInfo stage={stage} time={time} score={score} />
       </Header>
-      <Board boardData={boardData} onClick={onClick} />
+      <Board boardData={boardData} boardColor={boardColor} answerBoardColor={answerBoardColor} onClick={onClick} />
     </>
   );
 }

@@ -3,8 +3,8 @@ import './Board.css';
 import { BoardItem } from 'components';
 import BoardProps from './Board.types';
 
-export default memo(function Board({ boardData, onClick }: BoardProps): JSX.Element {
-  const { size, numOfBoardItems, answerIndex, boardColor, answerBoardColor } = boardData;
+export default memo(function Board({ boardData, boardColor, answerBoardColor, onClick }: BoardProps): JSX.Element {
+  const { size, numOfBoardItems, answerIndex } = boardData;
 
   return (
     <div className="wrapper">
