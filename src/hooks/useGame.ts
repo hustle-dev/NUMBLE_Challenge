@@ -29,7 +29,7 @@ export default function useGame() {
     }, 100);
   }, [isPlaying, dispatch, stage, score]);
 
-  const boardState = useMemo(() => {
+  const boardData = useMemo(() => {
     const lengthOfBoardRow = getLengthOfBoardRow(stage);
     const numOfBoardItems = getNumOfBoardItems(lengthOfBoardRow);
     const size = getBoardItemSize(lengthOfBoardRow);
@@ -39,8 +39,10 @@ export default function useGame() {
       size,
       numOfBoardItems,
       answerIndex,
+      boardColor,
+      answerBoardColor,
     };
-  }, [stage]);
+  }, [answerBoardColor, boardColor, stage]);
 
   const onClick = useCallback((isAnswer: boolean) => {
     if (isAnswer) {
@@ -50,8 +52,5 @@ export default function useGame() {
     }
   }, []);
 
-  const gameInfo = { stage, time, score };
-  const boardData = { ...boardState, boardColor, answerBoardColor };
-
-  return { gameInfo, boardData, onClick };
+  return { gameInfo: { stage, time, score }, boardData, onClick };
 }
